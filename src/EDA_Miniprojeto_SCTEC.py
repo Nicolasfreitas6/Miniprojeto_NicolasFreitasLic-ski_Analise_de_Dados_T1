@@ -1,6 +1,6 @@
 import csv
 import re
-import datetime
+from datetime import datetime
 import pandas as pd
 
 ##Sprint 1: Importação dos dados
@@ -90,12 +90,64 @@ for col in df_varejo.columns:
         df_varejo[col] = df_varejo[col].apply(converter_para_float)
         print(f"-> Coluna decimal identificada e convertida: {col}")
 
-#Transformando a coluna de data em datetime
-df_varejo['DATA'] = pd.to_datetime(df_varejo['DATA'], format='%d/%m/%Y')
-
 #Verificando o resultado da Sprint 2
 print("\n--- Visualização dos dados após transformações da Sprint 2 ---")
 print(df_varejo.head())
 print("\nNovos tipos de dados confirmados:")
 print(df_varejo.dtypes)
 print("="*50 + "\n")
+
+##Sprint 3: Limpeza de Nulos e Duplicatas
+#Verificando valores nulos por coluna
+print("Valores nulos por coluna:")
+print(df_varejo.isnull().sum())
+
+#Verificando valores duplicados por coluna
+total_duplicatas = df_varejo.duplicated().sum()
+print(f"\nTotal de linhas duplicadas: {total_duplicatas}")
+
+#Removendo as linhas que são cópias exatas umas das outras, mantendo a primeira ocorrência.
+df_varejo = df_varejo.drop_duplicates()
+
+#Transformando a coluna de data em datetime
+def converter_para_datetime(data_str):
+    try:
+        #Convertendo a string no formato Dia/Mês/Ano
+        return datetime.strptime(str(data_str), '%d/%m/%Y')
+    except ValueError:
+        #Se a data for inválida ou vazia, retorna nulo (Not a Time)
+        return pd.NaT
+
+df_varejo['DATA'] = df_varejo['DATA'].apply(converter_para_datetime)
+
+#Tratando categorias vazias
+def preencher_categoria(categoria):
+    # Se o valor for nulo (NaN) ou uma string vazia
+    if pd.isna(categoria) or str(categoria).strip() == '':
+        return 'Sem Categoria'
+    else:
+        return categoria
+    
+df_varejo['PR_CAT'] = df_varejo['PR_CAT'].apply(preencher_categoria)
+
+#--- Justificativa da limpeza de nulos ---
+#1. PR_CAT: Valores vazios foram imputados com "Sem Categoria" para não perdermos o registo  da compra do cliente, mantendo o volume de vendas correto e não afetando estatísticas.
+#2. Identificadores (CO_ID, PR_ID, CL_ID): Registros sem o ID da compra, ID do produto ou ID do cliente são considerados inconsistências graves (órfãos), pois impedem o rastreio da operação de retalho. Optou-se por eliminá-los (drop).
+#3. CL_FHL (Número de filhos): Caso existam nulos nesta coluna, serão imputados com a mediana, para não distorcer a estatística, tendo em vista que a média é sensível a outliers.
+
+#Removendo linhas onde os IDs essenciais são nulos
+df_varejo = df_varejo.dropna(subset=['CO_ID', 'PR_ID', 'CL_ID'])
+
+#Imputando nulos na coluna Número de Filhos (CL_FHL) com a mediana
+mediana_filhos = df_varejo['CL_FHL'].median()
+
+#Preenchendo os nulos e garante que o tipo se mantém inteiro
+df_varejo['CL_FHL'] = df_varejo['CL_FHL'].fillna(mediana_filhos)
+
+print("\nVerificação final após limpeza do Sprint 3:")
+print("-" * 50)
+print(f"Número de registos finais: {df_varejo.shape[0]}")
+print(f"Total de duplicatas restantes: {df_varejo.duplicated().sum()}")
+print("Valores nulos restantes por coluna:")
+print(df_varejo.isnull().sum())
+print("-" * 50)
