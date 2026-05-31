@@ -29,9 +29,14 @@ Este projeto foi estruturado para ser executado tanto localmente quanto em ambie
 
 **1. Clonar o Repositório:**
 Abra o seu terminal (ou Git Bash) na pasta onde deseja salvar o projeto e execute o comando de clone:
+
     - git clone [https://github.com/Nicolasfreitas6/Miniprojeto_NicolasFreitasLic-ski_Analise_de_Dados_T1.git](https://github.com/Nicolasfreitas6/Miniprojeto_NicolasFreitasLic-ski_Analise_de_Dados_T1.git)
     - cd Miniprojeto_NicolasFreitasLic-ski_Analise_de_Dados_T1
+
 **2. Instale as bibliotecas necessárias:** `pip install pandas`.
+
 **3. Direcionamento do arquivo de DataFrame:** Certifique-se de que o arquivo `df_limpo_varejo.csv` está no mesmo diretório.
+
     _Obs:_ O arquivo 'Varejo.csv' dentro da pasta 'data' é o csv 'sujo', fornecido pela SCTEC para realizar a análise. O arquivo 'df_limpo_varejo csv' é o arquivo onde as limpezas foram realizadas.
+    
 **4. Execute o script principal:** `python EDA_Miniprojeto_SCTEC.py`.
