@@ -132,7 +132,7 @@ df_varejo['PR_CAT'] = df_varejo['PR_CAT'].apply(preencher_categoria)
 
 #--- Justificativa da limpeza de nulos ---
 #1. PR_CAT: Valores vazios foram imputados com "Sem Categoria" para não perdermos o registo  da compra do cliente, mantendo o volume de vendas correto e não afetando estatísticas.
-#2. Identificadores (CO_ID, PR_ID, CL_ID): Registros sem o ID da compra, ID do produto ou ID do cliente são considerados inconsistências graves (órfãos), pois impedem o rastreio da operação de retalho. Optou-se por eliminá-los (drop).
+#2. Identificadores (CO_ID, PR_ID, CL_ID): Registros sem o ID da compra, ID do produto ou ID do cliente são graves e poluem muito o dataset, pois, se não sabemos o que foi comprado, ou quem comprou, esse registo é inútil para qualquer cruzamento de dados. Como não podemos "adivinhar" o ID de um cliente ou de um produto, a única alternativa plausível é eliminar esses registos inválidos.
 #3. CL_FHL (Número de filhos): Caso existam nulos nesta coluna, serão imputados com a mediana, para não distorcer a estatística, tendo em vista que a média é sensível a outliers.
 
 #Removendo linhas onde os IDs essenciais são nulos
@@ -151,3 +151,28 @@ print(f"Total de duplicatas restantes: {df_varejo.duplicated().sum()}")
 print("Valores nulos restantes por coluna:")
 print(df_varejo.isnull().sum())
 print("-" * 50)
+
+##Sprint 4: Estatística Descritiva Básica
+#Estatística básica da coluna de número de filhos
+print("1. Estatísticas Descritivas para 'Número de Filhos' (CL_FHL):")
+
+#Usando o método .describe() para calcular automaticamente estatísticas básicas e rápidas da coluna de número de filhos.
+estatisticas_filhos = df_varejo['CL_FHL'].describe()
+print(estatisticas_filhos)
+
+#A moda (o valor que mais se repete) não vem no describe(), logo calculei à parte
+moda_filhos = df_varejo['CL_FHL'].mode()[0]
+print(f"Moda: {moda_filhos}")
+
+##Aqui farei agrupamentos, como requisito para nota máxima, mas também, entender alguns questionamentos quanto ao dataset 
+#Agrupamento 1: Qual é o genero que mais consome (em volume de itens)?
+#Agrupei por Genero e contei a quantidade de IDs de produtos registados.
+print("Agrupamento 1: Volume de itens comprados por Genero")
+compras_por_genero = df_varejo.groupby('CL_GENERO')['PR_ID'].count().sort_values(ascending=False)
+print(compras_por_genero)
+
+#Agrupamento 2: Quais são as categorias com maior saída de produtos?
+#Agrupei por Categoria e contei, ordenando do maior para o menor.
+print("Agrupamento 2: Categorias de produtos mais vendidas")
+categorias_mais_vendidas = df_varejo.groupby('PR_CAT')['PR_ID'].count().sort_values(ascending=False)
+print(categorias_mais_vendidas)
