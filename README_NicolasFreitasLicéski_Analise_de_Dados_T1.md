@@ -37,6 +37,6 @@ Abra o seu terminal (ou Git Bash) na pasta onde deseja salvar o projeto e execut
 
 **3. Direcionamento do arquivo de DataFrame:** Certifique-se de que o arquivo `df_limpo_varejo.csv` está no mesmo diretório.
 
-    _Obs:_ O arquivo 'Varejo.csv' dentro da pasta 'data' é o csv 'sujo', fornecido pela SCTEC para realizar a análise. O arquivo 'df_limpo_varejo csv' é o arquivo onde as limpezas foram realizadas.
-    
+    Obs: O arquivo 'Varejo.csv' dentro da pasta 'data' é o csv 'sujo', fornecido pela SCTEC para realizar a análise. O arquivo 'df_limpo_varejo csv' é o arquivo onde as limpezas foram realizadas.
+
 **4. Execute o script principal:** `python EDA_Miniprojeto_SCTEC.py`.
