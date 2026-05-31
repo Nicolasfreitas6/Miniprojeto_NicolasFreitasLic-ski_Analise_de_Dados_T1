@@ -97,6 +97,10 @@ print("\nNovos tipos de dados confirmados:")
 print(df_varejo.dtypes)
 print("="*50 + "\n")
 
+##Relatando dois problemas encontrados no Dataset:
+#1. Inconsistência de Estrutura com Colunas Vazias, ao final de cada linha, existem vários pontos e vírgulas extras (;;;;), o que faz com que o interpretador crie colunas extras sem nome (vazias).
+#2. Dados Faltantes (Nulos/Missing Values), ao analisar o conjunto, foi possível encontrar categorias de produtos que não possuem classificação e ID's de identificação com valores não preenchidos.
+
 ##Sprint 3: Limpeza de Nulos e Duplicatas
 #Verificando valores nulos por coluna
 print("Valores nulos por coluna:")
