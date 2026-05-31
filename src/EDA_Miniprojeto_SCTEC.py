@@ -180,3 +180,6 @@ print(compras_por_genero)
 print("Agrupamento 2: Categorias de produtos mais vendidas")
 categorias_mais_vendidas = df_varejo.groupby('PR_CAT')['PR_ID'].count().sort_values(ascending=False)
 print(categorias_mais_vendidas)
+
+#Criando o DataFrame limpo para envio do projeto
+df_varejo.to_csv('data/df_limpo_varejo.csv', index=False, sep=';', encoding='utf-8-sig')
